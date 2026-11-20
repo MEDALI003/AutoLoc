@@ -18,6 +18,7 @@ Seuls les champs de relation ont été ajoutés aux entités ; aucun autre attri
 | Agence – Employe | OneToMany / ManyToOne | `Employe.agence` (`employe.agence_id`, nullable) | `Agence.employes` | aucune | non | ManyToOne EAGER (défaut) / OneToMany LAZY |
 | Vehicule – Equipement | ManyToMany | `Vehicule.equipements` (table `vehicule_equipement`) | `Equipement.vehicules` | aucune | — | LAZY |
 | Reservation – Contrat | OneToOne | `Contrat.reservation` (`contrat.reservation_id`, UNIQUE) | `Reservation.contrat` | ALL (Reservation → Contrat) | non | Contrat → Reservation LAZY / Reservation → Contrat EAGER |
+| Agence – Vehicule | OneToMany / ManyToOne | `Vehicule.agence` (`vehicule.agence_id`, nullable) | `Agence.vehicules` | aucune | non | ManyToOne EAGER (défaut) / OneToMany LAZY |
 | Contrat – Paiement | OneToMany, composition | `Paiement.contrat` (`paiement.contrat_id`, NOT NULL) | `Contrat.paiements` | ALL | oui | LAZY |
 
 Méthodes de synchronisation : `Agence.addEmploye/removeEmploye`, `Vehicule.addEquipement/removeEquipement`,
@@ -33,6 +34,8 @@ Boucles JSON : `@JsonIgnoreProperties` (Agence ↔ Employe), `@JsonIgnore` (`Equ
 | DELETE | `/api/agences/{agenceId}/employes/{employeId}` | Désaffecte l'employé | 204, 404, 409 |
 | POST | `/api/vehicules/{id}/equipements/{equipementId}` | Affecte l'équipement | 200, 404, 409 |
 | DELETE | `/api/vehicules/{id}/equipements/{equipementId}` | Retire l'équipement | 204, 404, 409 |
+| POST / DELETE | `/api/agences/{agenceId}/vehicules/{vehiculeId}` | Affecte / désaffecte un véhicule | 200 / 204, 404, 409 |
+| PUT | `/api/agences/{agenceCibleId}/vehicules/{vehiculeId}` | Transfère le véhicule (met à jour `vehicule.agence_id`) | 200, 404, 409 |
 | POST | `/api/reservations/{id}/contrat` | Crée le contrat avec ses paiements | 201, 400, 404, 409 |
 | POST | `/api/contrats/{id}/paiements` | Ajoute un paiement | 201, 400, 404 |
 | DELETE | `/api/contrats/{id}/paiements/{paiementId}` | Retire (supprime) le paiement | 204, 404, 409 |

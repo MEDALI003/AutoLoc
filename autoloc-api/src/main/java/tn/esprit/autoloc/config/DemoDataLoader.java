@@ -34,11 +34,11 @@ public class DemoDataLoader implements CommandLineRunner {
         }
         List<Vehicule> vehicules = List.of(
                 new Vehicule(null, "123 TU 4567", "Peugeot", "208",
-                        CategorieVehicule.CITADINE, new BigDecimal("90.00"), StatutVehicule.DISPONIBLE, new HashSet<>()),
+                        CategorieVehicule.CITADINE, new BigDecimal("90.00"), StatutVehicule.DISPONIBLE, new HashSet<>(), null),
                 new Vehicule(null, "201 TU 1122", "Volkswagen", "Passat",
-                        CategorieVehicule.BERLINE, new BigDecimal("150.00"), StatutVehicule.DISPONIBLE, new HashSet<>()),
+                        CategorieVehicule.BERLINE, new BigDecimal("150.00"), StatutVehicule.DISPONIBLE, new HashSet<>(), null),
                 new Vehicule(null, "215 TU 9876", "Hyundai", "Tucson",
-                        CategorieVehicule.SUV, new BigDecimal("180.00"), StatutVehicule.MAINTENANCE, new HashSet<>())
+                        CategorieVehicule.SUV, new BigDecimal("180.00"), StatutVehicule.MAINTENANCE, new HashSet<>(), null)
         );
         vehiculeRepository.saveAll(vehicules);
         log.info("{} vehicules de demonstration inseres", vehicules.size());

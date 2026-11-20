@@ -29,11 +29,11 @@ public class DemoDataInitializer implements CommandLineRunner {
         }
         List<Vehicule> vehicules = List.of(
                 new Vehicule(null, "123 TU 4567", "Peugeot", "208", CategorieVehicule.CITADINE,
-                        new BigDecimal("90.00"), StatutVehicule.DISPONIBLE, new HashSet<>()),
+                        new BigDecimal("90.00"), StatutVehicule.DISPONIBLE, new HashSet<>(), null),
                 new Vehicule(null, "234 TU 5678", "Volkswagen", "Passat", CategorieVehicule.BERLINE,
-                        new BigDecimal("150.00"), StatutVehicule.DISPONIBLE, new HashSet<>()),
+                        new BigDecimal("150.00"), StatutVehicule.DISPONIBLE, new HashSet<>(), null),
                 new Vehicule(null, "345 TU 6789", "Kia", "Sportage", CategorieVehicule.SUV,
-                        new BigDecimal("180.00"), StatutVehicule.MAINTENANCE, new HashSet<>()));
+                        new BigDecimal("180.00"), StatutVehicule.MAINTENANCE, new HashSet<>(), null));
         vehiculeRepository.saveAll(vehicules);
         log.info("{} véhicules de démonstration insérés", vehicules.size());
     }

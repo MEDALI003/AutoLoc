@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.domain.Employe;
+import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.service.IAgenceService;
 
 import java.util.List;
@@ -92,5 +93,36 @@ public class AgenceController {
             @ApiResponse(responseCode = "404", description = "Agence introuvable")})
     public List<Employe> findEmployes(@PathVariable Long agenceId) {
         return agenceService.findEmployes(agenceId);
+    }
+
+    @PostMapping("/{agenceId}/vehicules/{vehiculeId}")
+    @Operation(summary = "Affecter un véhicule (sans agence) à une agence")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicule affecté ; renvoie l'agence mise à jour"),
+            @ApiResponse(responseCode = "404", description = "Agence ou véhicule introuvable"),
+            @ApiResponse(responseCode = "409", description = "Véhicule déjà affecté à une agence")})
+    public Agence affecterVehicule(@PathVariable Long agenceId, @PathVariable Long vehiculeId) {
+        return agenceService.affecterVehicule(agenceId, vehiculeId);
+    }
+
+    @DeleteMapping("/{agenceId}/vehicules/{vehiculeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Désaffecter un véhicule de son agence (le véhicule est conservé)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Véhicule désaffecté"),
+            @ApiResponse(responseCode = "404", description = "Agence ou véhicule introuvable"),
+            @ApiResponse(responseCode = "409", description = "Le véhicule n'est pas affecté à cette agence")})
+    public void desaffecterVehicule(@PathVariable Long agenceId, @PathVariable Long vehiculeId) {
+        agenceService.desaffecterVehicule(agenceId, vehiculeId);
+    }
+
+    @PutMapping("/{agenceCibleId}/vehicules/{vehiculeId}")
+    @Operation(summary = "Transférer un véhicule vers une autre agence (met à jour vehicule.agence_id)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicule transféré"),
+            @ApiResponse(responseCode = "404", description = "Agence cible ou véhicule introuvable (rollback)"),
+            @ApiResponse(responseCode = "409", description = "Le véhicule est déjà dans l'agence cible")})
+    public Vehicule transfererVehicule(@PathVariable Long agenceCibleId, @PathVariable Long vehiculeId) {
+        return agenceService.transfererVehicule(vehiculeId, agenceCibleId);
     }
 }

@@ -37,6 +37,7 @@ public class VehiculeServiceImpl implements IVehiculeService {
     public Vehicule create(Vehicule vehicule) {
         vehicule.setIdVehicule(null);
         vehicule.setEquipements(new HashSet<>());   // les affectations passent par affecterEquipement
+        vehicule.setAgence(null);                   // et par IAgenceService
         return vehiculeRepository.save(vehicule);
     }
 
@@ -49,12 +50,16 @@ public class VehiculeServiceImpl implements IVehiculeService {
         existant.setCategorie(vehicule.getCategorie());
         existant.setTarifJournalier(vehicule.getTarifJournalier());
         existant.setStatut(vehicule.getStatut());
-        return existant;   // les équipements ne sont pas écrasés
+        return existant;   // les équipements et l'agence ne sont pas écrasés
     }
 
     @Override
     public void delete(Long id) {
-        vehiculeRepository.delete(chargerVehicule(id));   // les lignes vehicule_equipement suivent
+        Vehicule vehicule = chargerVehicule(id);
+        if (vehicule.getAgence() != null) {
+            vehicule.getAgence().removeVehicule(vehicule);
+        }
+        vehiculeRepository.delete(vehicule);   // les lignes vehicule_equipement suivent
     }
 
     @Override

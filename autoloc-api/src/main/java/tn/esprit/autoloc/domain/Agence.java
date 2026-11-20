@@ -44,6 +44,10 @@ public class Agence {
     @JsonIgnoreProperties("agence")
     private List<Employe> employes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "agence")
+    @JsonIgnoreProperties("agence")
+    private List<Vehicule> vehicules = new ArrayList<>();
+
     public void addEmploye(Employe employe) {
         employes.add(employe);
         employe.setAgence(this);
@@ -52,5 +56,15 @@ public class Agence {
     public void removeEmploye(Employe employe) {
         employes.remove(employe);
         employe.setAgence(null);
+    }
+
+    public void addVehicule(Vehicule vehicule) {
+        vehicules.add(vehicule);
+        vehicule.setAgence(this);
+    }
+
+    public void removeVehicule(Vehicule vehicule) {
+        vehicules.remove(vehicule);
+        vehicule.setAgence(null);
     }
 }
