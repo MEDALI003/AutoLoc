@@ -19,7 +19,9 @@ public interface IVehiculeService {
 
     Vehicule affecterEquipement(Long vehiculeId, Long equipementId);
 
-    void desaffecterEquipement(Long vehiculeId, Long equipementId);
-
+    Vehicule desaffecterEquipement(Long vehiculeId, Long equipementId);
     List<Equipement> findEquipements(Long vehiculeId);
+
+
+    Vehicule retirerAgence(Long vehiculeId);
 }

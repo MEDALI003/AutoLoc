@@ -1,8 +1,10 @@
 package tn.esprit.autoloc.service;
 
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.domain.Equipement;
 import tn.esprit.autoloc.domain.Vehicule;
 import tn.esprit.autoloc.exception.OperationRefuseeException;
@@ -75,7 +77,7 @@ public class VehiculeServiceImpl implements IVehiculeService {
     }
 
     @Override
-    public void desaffecterEquipement(Long vehiculeId, Long equipementId) {
+    public Vehicule desaffecterEquipement(Long vehiculeId, Long equipementId) {
         Vehicule vehicule = chargerVehicule(vehiculeId);
         Equipement equipement = chargerEquipement(equipementId);
         if (!vehicule.getEquipements().contains(equipement)) {
@@ -83,12 +85,26 @@ public class VehiculeServiceImpl implements IVehiculeService {
                     "L'équipement " + equipementId + " n'est pas affecté au véhicule " + vehiculeId);
         }
         vehicule.removeEquipement(equipement);   // DELETE FROM vehicule_equipement ; équipement conservé
+        return vehicule;                         // renvoie le véhicule mis à jour
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Equipement> findEquipements(Long vehiculeId) {
         return List.copyOf(chargerVehicule(vehiculeId).getEquipements());
+    }
+
+
+
+    @Override
+    public Vehicule retirerAgence(Long vehiculeId) {
+        Vehicule vehicule = chargerVehicule(vehiculeId);
+        Agence agence = vehicule.getAgence();
+        if (agence == null) {
+            throw new OperationRefuseeException("Le véhicule " + vehiculeId + " n'est affecté à aucune agence");
+        }
+        agence.removeVehicule(vehicule);   // synchronise les deux côtés → UPDATE agence_id = NULL au commit
+        return vehicule;
     }
 
     private Vehicule chargerVehicule(Long id) {

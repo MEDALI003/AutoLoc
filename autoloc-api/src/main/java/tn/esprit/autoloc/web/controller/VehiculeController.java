@@ -77,16 +77,7 @@ public class VehiculeController {
         return vehiculeService.affecterEquipement(id, equipementId);
     }
 
-    @DeleteMapping("/{id}/equipements/{equipementId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Retirer un équipement d'un véhicule (l'équipement est conservé)")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Équipement retiré"),
-            @ApiResponse(responseCode = "404", description = "Véhicule ou équipement introuvable"),
-            @ApiResponse(responseCode = "409", description = "Équipement non affecté à ce véhicule")})
-    public void desaffecterEquipement(@PathVariable Long id, @PathVariable Long equipementId) {
-        vehiculeService.desaffecterEquipement(id, equipementId);
-    }
+
 
     @GetMapping("/{id}/equipements")
     @Operation(summary = "Lister les équipements d'un véhicule")
@@ -95,5 +86,23 @@ public class VehiculeController {
             @ApiResponse(responseCode = "404", description = "Véhicule introuvable")})
     public List<Equipement> findEquipements(@PathVariable Long id) {
         return vehiculeService.findEquipements(id);
+    }
+    @PutMapping("/{id}/agence")
+    @Operation(summary = "Mettre à jour le véhicule : retirer son agence (agence_id = NULL)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicule mis à jour, agence = null"),
+            @ApiResponse(responseCode = "404", description = "Véhicule introuvable"),
+            @ApiResponse(responseCode = "409", description = "Le véhicule n'a pas d'agence")})
+    public Vehicule retirerAgence(@PathVariable Long id) {
+        return vehiculeService.retirerAgence(id);
+    }
+    @PutMapping("/{id}/equipements/{equipementId}/retirer")
+    @Operation(summary = "Mettre à jour le véhicule : retirer un équipement (l'équipement est conservé)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicule mis à jour sans l'équipement"),
+            @ApiResponse(responseCode = "404", description = "Véhicule ou équipement introuvable"),
+            @ApiResponse(responseCode = "409", description = "Équipement non affecté à ce véhicule")})
+    public Vehicule retirerEquipement(@PathVariable Long id, @PathVariable Long equipementId) {
+        return vehiculeService.desaffecterEquipement(id, equipementId);
     }
 }

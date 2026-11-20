@@ -74,4 +74,5 @@ public class Vehicule {
         equipements.remove(equipement);
         equipement.getVehicules().remove(this);
     }
+    
 }
